@@ -3,13 +3,14 @@ import boto3
 import datetime
 
 s3 = boto3.client('s3')
+
 def lambda_handler(event, context):
     data = {
         "timestamp": str(datetime.datetime.utcnow()),
         "value": "sample event data"
     }
     s3.put_object(
-        Bucket="event-pipeline-raw-data",
+        Bucket="event-pipeline-raw-data",  # Must match your Terraform bucket name
         Key=f"data/{datetime.datetime.utcnow().isoformat()}.json",
         Body=json.dumps(data)
     )
