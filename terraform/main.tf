@@ -2,13 +2,17 @@ provider "aws" {
   region = "us-east-1"
 }
 
+resource "random_id" "suffix" {
+  byte_length = 4
+}
+
 resource "aws_s3_bucket" "raw_data" {
-  bucket = "event-pipeline-raw-data"
+  bucket = "event-pipeline-raw-data-${random_id.suffix.hex}"
   force_destroy = true
 }
 
 resource "aws_s3_bucket" "report_bucket" {
-  bucket = "event-pipeline-report-bucket"
+  bucket = "event-pipeline-report-bucket-${random_id.suffix.hex}"
   force_destroy = true
 }
 
@@ -48,7 +52,7 @@ resource "aws_lambda_function" "report_lambda" {
 }
 
 resource "aws_cloudwatch_event_rule" "daily_trigger" {
-  name        = "daily-lambda-trigger"
+  name                = "daily-lambda-trigger"
   schedule_expression = "rate(1 day)"
 }
 

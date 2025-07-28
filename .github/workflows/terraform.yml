@@ -1,4 +1,4 @@
-name: Terraform CI/CD
+name: Terraform Deploy
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
 
 jobs:
   terraform:
-    name: Terraform Workflow
+    name: Terraform CI/CD
     runs-on: ubuntu-latest
 
     env:
@@ -21,6 +21,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
+      - name: Clean Terraform Cache
+        run: rm -rf .terraform .terraform.lock.hcl
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
