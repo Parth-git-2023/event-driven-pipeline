@@ -1,11 +1,21 @@
 name: Terraform Destroy
 
 on:
-  workflow_dispatch:  # Manual trigger from GitHub UI
+  workflow_dispatch:  
 
 jobs:
   destroy:
     runs-on: ubuntu-latest
+
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: us-east-1
+
+    defaults:
+      run:
+        working-directory: terraform
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -17,8 +27,6 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        working-directory: terraform
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
-        working-directory: terraform
